@@ -10,6 +10,7 @@ public class PlayerController : MonoBehaviour {
     public float r, g, b;
 
     public float speed;
+    public float rateOfColorChange;
 
     public float moveHorizontal, moveVertical;
 
@@ -19,7 +20,8 @@ public class PlayerController : MonoBehaviour {
         r = currentColor.r; g = currentColor.g; b = currentColor.b;
         rb = GetComponent<Rigidbody2D>();
         sr = GetComponent <SpriteRenderer>();
-        currentColor = new Color(Random.Range(0.0f, 255.0f), Random.Range(0.0f, 255.0f), Random.Range(0.0f, 255.0f), 1.0f);
+        currentColor = new Color(Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f), 1.0f);
+        sr.color = currentColor;
     }
 
     //Where most physics code will go 
@@ -37,43 +39,49 @@ public class PlayerController : MonoBehaviour {
 	// Update is called once per frame
 	void Update ()
     {
-        
+        UpdateColor();
     }
 
     void UpdateColor()
     {
         //Moving horizontally will update the R element of the color
+        //if moving positively in x axis
         if (moveHorizontal > 0)
         {
-            if (currentColor.r == 1.0f)
+            //if the current color's r value is already at the max of 1
+            if (currentColor.r >= 1.0f)
+                //change the color to 0 and you can continue to increment positively 
                 currentColor = new Color(0.0f, currentColor.g, currentColor.b, currentColor.a);
             else
-                currentColor = new Color(currentColor.r + 0.01f, currentColor.g, currentColor.b, currentColor.a);
+                //or else just increment normally
+                currentColor = new Color(currentColor.r + rateOfColorChange, currentColor.g, currentColor.b, currentColor.a);
         }
+        //else if we're moving negatively
         else if (moveHorizontal < 0)
         {
-            if (currentColor.r == 0.0f)
+            //if the current color's r value is at the min of 0
+            if (currentColor.r <= 0.0f)
+                //change the r to 1 and you can continue to decrement
                 currentColor = new Color(1.0f, currentColor.g, currentColor.b, currentColor.a);
             else
-                currentColor = new Color(currentColor.r - 0.01f, currentColor.g, currentColor.b, currentColor.a);
+                currentColor = new Color(currentColor.r - rateOfColorChange, currentColor.g, currentColor.b, currentColor.a);
         }
-        //currentColor = sr.color;
         //Moving vertically will update the G 
         if (moveVertical > 0)
         {
-            if (currentColor.g == 1.0f)
+            if (currentColor.g >= 1.0f)
                 currentColor = new Color(currentColor.r, 0.0f, currentColor.b, currentColor.a);
             else
-                currentColor = new Color(currentColor.r, currentColor.g + 0.01f, currentColor.b, currentColor.a);
+                currentColor = new Color(currentColor.r, currentColor.g + rateOfColorChange, currentColor.b, currentColor.a);
         }
         else if (moveVertical < 0)
         {
-            if (currentColor.g == 0.0f)
+            if (currentColor.g <= 0.0f)
                 currentColor = new Color(currentColor.r, 1.0f, currentColor.b, currentColor.a);
             else
-                currentColor = new Color(currentColor.r, currentColor.g - 0.01f, currentColor.b, currentColor.a);
+                currentColor = new Color(currentColor.r, currentColor.g - rateOfColorChange, currentColor.b, currentColor.a);
         }
-        //sr.color = currentColor;
+        sr.color = currentColor;
         r = currentColor.r; g = currentColor.g; b = currentColor.b;
     }
 }

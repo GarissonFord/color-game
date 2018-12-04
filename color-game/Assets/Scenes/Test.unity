@@ -224,6 +224,7 @@ MonoBehaviour:
   g: 0
   b: 0
   speed: 20
+  rateOfColorChange: 0.01
   moveHorizontal: 0
   moveVertical: 0
 --- !u!212 &549825896
